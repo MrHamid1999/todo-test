@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux"
 import { changeStatus } from '../api/changeStatus.api.js'
 import { getDataAction } from '../store/actions/getData.action.js'
 import {SET_TRUE} from "../store/actions/newTaskAction.js"
-import { changeTasks } from "../api/changeTasks.api.js"
+
 
 function List({id , props}) {
 
@@ -40,7 +40,7 @@ function List({id , props}) {
      newArray.splice(index , 0 , selectedTask)
 
      dispatch(getDataAction(newArray))
-    //  dispatch(changeTasks(newArray))
+    
 
     }else{
       const newArray = allTasks.filter(item => item.id != selectedTask.id)
@@ -56,11 +56,14 @@ function List({id , props}) {
   // 2-changing the order of tasks in the same category
   // 3-doing nothing
   const handleDrop= (e) => {
-
+    // dropZone is the task or done list
     const dropZone = e.target.id == "task" || e.target.id == "done" ? e.target.id : false ; 
+    // item is one of the elements inside the list 
     const item = e.target.id ? e.target : e.target.parentElement
 
-    // if the element has been dragged inside the dropZone and not over another task
+
+  
+    // if the element has been dragged inside the dropZone and not over item
     if (dropZone) {
       if (dropZone == "task") {
         if(selectedTask.done){
@@ -82,7 +85,7 @@ function List({id , props}) {
     if(!dropZone && item){
     
       if(item.parentElement.id == "done"){
-
+        // if element dragged inside the same dropZone
         if (selectedTask.done) {
           reOrder(item , false)
         }else{
@@ -91,7 +94,7 @@ function List({id , props}) {
         }
       }
       if(item.parentElement.id == "task"){
-      
+        // if the element dragged inside the same dropZone
         if (!selectedTask.done) {
           reOrder(item , false)
         }else{
@@ -105,10 +108,13 @@ function List({id , props}) {
   // enabling the dropzone for drop event
   const handleDragOver = (e) => {
     e.preventDefault()
+  
+
   }
   return (
-    <div id={id} className="min-w-50 w-25 h-75 position-relative text-white bg-dark d-flex flex-column align-items-center mt-5 rounded"
-      style={{}}
+    <div 
+      id={id} 
+      className="min-w-50 w-25 h-75 position-relative text-white bg-dark d-flex flex-column align-items-center mt-5 rounded p-3 "
       onDrop={handleDrop}
       onDragOver={handleDragOver}
       >
@@ -116,12 +122,15 @@ function List({id , props}) {
           <h2 className="p-2 ">{id}</h2>
         </div>
         {props.map(item => {
-          return <Todo props={item} key={item.id} />
+          return <Todo props={item} key={item.id} onDragOver={handleDragOver} />
         })}
 
-        {!isDone && <button className='bg-primary text-white position-fixed ' style={{bottom : "25%"}} onClick={handleClickNewTask}
-        
-        >Create New</button>}
+        {!isDone &&
+         <button 
+         className='bg-primary w-25 text-white position-fixed ' 
+         style={{bottom : "19%"}} 
+         onClick={handleClickNewTask}
+         >Create New</button>}
       </div>
   )
 }

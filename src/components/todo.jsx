@@ -13,8 +13,8 @@ function Todo({props}) {
     const tasks = useSelector(state => state.tasks)
     const dispatch = useDispatch()
 
-    // toggling the task between done and tobe done 
-    // toggling the task "done " props 
+    // toggling the task between done and to be done 
+    // toggling the task "done" props 
     const handleChange = () => {
       const newStatus = !done
       dispatch(changeStatus(id , newStatus))
